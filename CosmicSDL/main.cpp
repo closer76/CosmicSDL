@@ -148,7 +148,7 @@ void releaseMedia() {
     g_textureList.clear();
 }
 
-void terminate()
+void cleanUp()
 {
     // Release surface
     releaseMedia();
@@ -166,64 +166,117 @@ void terminate()
 
 int main( int argc, char* args[] )
 {
-    if (!init())
-    {
-        printf("Failed to initialize...\n");
-    }
-    else
-    {
-        // Load media
+    do {
+        if (!init())
+        {
+            printf("Failed to initialize...\n");
+            break;
+        }
+        
         if (!loadMedia()) {
             printf("Failed to load media...\n");
-        } else {
-            bool bQuit = false;
-            SDL_Event evt;
-            
-            while (!bQuit) {
-                // Handle user events
-                while (SDL_PollEvent(&evt) != 0) {
-                    if (evt.type == SDL_QUIT) {
-                        bQuit = true;
-                    }
-                    else if (evt.type == SDL_KEYDOWN)
-                    {
-                        switch (evt.key.keysym.sym) {
-                            case SDLK_UP:
-                                g_currentTexture = g_textureList["up.bmp"];
-                                break;
+            break;
+        }
+        
+        // Screen layout
+        SDL_Rect rectViewPort;
 
-                            case SDLK_DOWN:
-                                g_currentTexture = g_textureList["down.bmp"];
-                                break;
+        // 「先畫大部份的區域，然後再利用 viewport 在 mainloop 裡更新小區域」
+        // 這個方法是行不通的！
+        // 所有的區域還是得在 mainloop 裡做。
+        // 1. SDL_RenderClear() 不會理會 viewport，會清楚整個 window 的區域。
+        // 2. 不呼叫 SDL_RenderClear() 的話，畫面會不斷閃動。
+#if 0
+        SDL_RenderClear(g_renderer);
 
-                            case SDLK_LEFT:
-                                g_currentTexture = g_textureList["left.bmp"];
-                                break;
-
-                            case SDLK_RIGHT:
-                                g_currentTexture = g_textureList["right.bmp"];
-                                break;
-                                
-                            case SDLK_ESCAPE:
-                                g_currentTexture = g_textureList["press.bmp"];
-                                break;
-                                
-                            default:
-                                break;
-                        }
+        // Upper-right: instruction
+        rectViewPort.x = SCREEN_WIDTH / 2;
+        rectViewPort.y = 0;
+        rectViewPort.w = SCREEN_WIDTH / 2;
+        rectViewPort.h = SCREEN_HEIGHT / 2;
+        SDL_RenderSetViewport(g_renderer, &rectViewPort);
+        SDL_RenderCopy(g_renderer, g_textureList["press.bmp"], NULL, NULL);
+        
+        // Lower: hello
+        rectViewPort.x = 0;
+        rectViewPort.y = SCREEN_HEIGHT / 2;
+        rectViewPort.w = SCREEN_WIDTH;
+        rectViewPort.h = SCREEN_HEIGHT / 2;
+        SDL_RenderSetViewport(g_renderer, &rectViewPort);
+        SDL_RenderCopy(g_renderer, g_textureList["hello_world.bmp"], NULL, NULL);
+#endif
+        
+        bool bQuit = false;
+        SDL_Event evt;
+        
+        // main loop
+        while (!bQuit) {
+            // Handle user events
+            while (SDL_PollEvent(&evt) != 0) {
+                if (evt.type == SDL_QUIT) {
+                    bQuit = true;
+                }
+                else if (evt.type == SDL_KEYDOWN)
+                {
+                    switch (evt.key.keysym.sym) {
+                        case SDLK_UP:
+                            g_currentTexture = g_textureList["up.bmp"];
+                            break;
+                            
+                        case SDLK_DOWN:
+                            g_currentTexture = g_textureList["down.bmp"];
+                            break;
+                            
+                        case SDLK_LEFT:
+                            g_currentTexture = g_textureList["left.bmp"];
+                            break;
+                            
+                        case SDLK_RIGHT:
+                            g_currentTexture = g_textureList["right.bmp"];
+                            break;
+                            
+                        case SDLK_ESCAPE:
+                            g_currentTexture = g_textureList["press.bmp"];
+                            break;
+                            
+                        default:
+                            break;
                     }
                 }
-                
-                SDL_RenderClear(g_renderer);
-                
-                SDL_RenderCopy(g_renderer, g_currentTexture, nullptr, nullptr);
-                
-                SDL_RenderPresent(g_renderer);
             }
-        }
-    }
+
+            SDL_RenderClear(g_renderer);
+            
+            // Upper-right: instruction
+            rectViewPort.x = SCREEN_WIDTH / 2;
+            rectViewPort.y = 0;
+            rectViewPort.w = SCREEN_WIDTH / 2;
+            rectViewPort.h = SCREEN_HEIGHT / 2;
+            SDL_RenderSetViewport(g_renderer, &rectViewPort);
+            SDL_RenderCopy(g_renderer, g_textureList["press.bmp"], NULL, NULL);
+            
+            // Lower: hello
+            rectViewPort.x = 0;
+            rectViewPort.y = SCREEN_HEIGHT / 2;
+            rectViewPort.w = SCREEN_WIDTH;
+            rectViewPort.h = SCREEN_HEIGHT / 2;
+            SDL_RenderSetViewport(g_renderer, &rectViewPort);
+            SDL_RenderCopy(g_renderer, g_textureList["hello_world.bmp"], NULL, NULL);
+
+            // Upper-left
+            rectViewPort.x = 0;
+            rectViewPort.y = 0;
+            rectViewPort.w = SCREEN_WIDTH / 2;
+            rectViewPort.h = SCREEN_HEIGHT / 2;
+            SDL_RenderSetViewport(g_renderer, &rectViewPort);
+            SDL_RenderCopy(g_renderer, g_currentTexture, nullptr, nullptr);
+            
+            SDL_RenderPresent(g_renderer);
+        } // main loop
+        
+    } while(0);
     
-    terminate();
+    cleanUp();
     
     return 0;
 }
