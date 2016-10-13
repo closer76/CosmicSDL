@@ -30,10 +30,10 @@ const int SCREEN_HEIGHT = 480;
 //The window we'll be rendering to
 SDL_Window* g_window = nullptr;
 
-//The surface contained by the window
-SDL_Surface* g_screenSurface = nullptr;
+// Main renderer
+SDL_Renderer* g_renderer = nullptr;
 
-SDL_Surface* g_currentSurface = nullptr;
+SDL_Texture* g_currentTexture = nullptr;
 
 vector<string> g_imageNameList {
     "hello_world.bmp",
@@ -45,7 +45,7 @@ vector<string> g_imageNameList {
     "loaded.png"
 };
 
-map<string,SDL_Surface*> g_surfaceList;
+map<string,SDL_Texture*> g_textureList;
 
 bool init()
 {
@@ -65,6 +65,16 @@ bool init()
         printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
         return false;
     }
+    
+    // Create Renderer
+    g_renderer = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
+    if (!g_renderer) {
+        printf("Cannot create renderer! SDL_Error: %s\n", SDL_GetError());
+        return false;
+    }
+    
+    // Initialize renderer color
+    SDL_SetRenderDrawColor(g_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
     // Initialize SDL_image.
     int imgFlags = IMG_INIT_PNG;
@@ -73,19 +83,19 @@ bool init()
         return false;
     }
 
-    // Get window surface
-    g_screenSurface = SDL_GetWindowSurface(g_window);
+    // Get main renderer.
+    g_renderer = SDL_GetRenderer(g_window);
 
     return true;
 }
 
-SDL_Surface* loadSurface(const string& path)
+SDL_Texture* loadTexture(const string& path)
 {
-    SDL_Surface* surfaceRaw = nullptr;
-    SDL_Surface* surfaceOptimized = nullptr;
+    SDL_Surface* surface = nullptr;
+    SDL_Texture* texture = nullptr;
     
-    surfaceRaw = IMG_Load(path.c_str());
-    if (!surfaceRaw)
+    surface = IMG_Load(path.c_str());
+    if (!surface)
     {
         printf("Unable to load image %s! SDL Error: %s\n",
                path.c_str(),
@@ -93,49 +103,49 @@ SDL_Surface* loadSurface(const string& path)
     }
     else
     {
-        surfaceOptimized = SDL_ConvertSurface(surfaceRaw, g_screenSurface->format, 0);
-        if (!surfaceOptimized)
+        texture = SDL_CreateTextureFromSurface(g_renderer, surface);
+        if (!texture)
         {
-            printf("Unable to optimize image %s! SDL Error: %s\n",
+            printf("Unable to create texture from image %s! SDL Error: %s\n",
                    path.c_str(),
                    SDL_GetError());
         }
         
         // release old surface
-        SDL_FreeSurface(surfaceRaw);
+        SDL_FreeSurface(surface);
     }
     
-    return surfaceOptimized;
+    return texture;
 }
 
 bool loadMedia()
 {
     bool result = true;
-    SDL_Surface* surface = nullptr;
+    SDL_Texture* texture = nullptr;
     
     for (const auto& str : g_imageNameList)
     {
-        surface = loadSurface(str.c_str());
-        if (surface) {
-            g_surfaceList[str] = surface;
+        texture = loadTexture(str.c_str());
+        if (texture) {
+            g_textureList[str] = texture;
         } else {
             result = false;
         }
     }
     
     // Set current surface to default one.
-    g_currentSurface = g_surfaceList["loaded.png"];
+    g_currentTexture = g_textureList["loaded.png"];
     
     return result;
 }
 
 void releaseMedia() {
-    for (const auto& pair : g_surfaceList)
+    for (const auto& pair : g_textureList)
     {
-        SDL_FreeSurface(pair.second);
-        g_surfaceList[pair.first] = nullptr;
+        SDL_DestroyTexture(pair.second);
+        g_textureList[pair.first] = nullptr;
     }
-    g_surfaceList.clear();
+    g_textureList.clear();
 }
 
 void terminate()
@@ -144,10 +154,13 @@ void terminate()
     releaseMedia();
     
     // Destroy window
+    SDL_DestroyRenderer(g_renderer);
     SDL_DestroyWindow( g_window );
+    g_renderer = nullptr;
     g_window = nullptr;
     
     // Quit SDL subsystems
+    IMG_Quit();
     SDL_Quit();
 }
 
@@ -176,23 +189,23 @@ int main( int argc, char* args[] )
                     {
                         switch (evt.key.keysym.sym) {
                             case SDLK_UP:
-                                g_currentSurface = g_surfaceList["up.bmp"];
+                                g_currentTexture = g_textureList["up.bmp"];
                                 break;
 
                             case SDLK_DOWN:
-                                g_currentSurface = g_surfaceList["down.bmp"];
+                                g_currentTexture = g_textureList["down.bmp"];
                                 break;
 
                             case SDLK_LEFT:
-                                g_currentSurface = g_surfaceList["left.bmp"];
+                                g_currentTexture = g_textureList["left.bmp"];
                                 break;
 
                             case SDLK_RIGHT:
-                                g_currentSurface = g_surfaceList["right.bmp"];
+                                g_currentTexture = g_textureList["right.bmp"];
                                 break;
                                 
                             case SDLK_ESCAPE:
-                                g_currentSurface = g_surfaceList["press.bmp"];
+                                g_currentTexture = g_textureList["press.bmp"];
                                 break;
                                 
                             default:
@@ -201,15 +214,11 @@ int main( int argc, char* args[] )
                     }
                 }
                 
-                //SDL_BlitSurface(g_currentSurface, NULL, g_screenSurface, NULL);
-                SDL_Rect rectBlit;
-                rectBlit.x = 0;
-                rectBlit.y = 0;
-                rectBlit.w = SCREEN_WIDTH;
-                rectBlit.h = SCREEN_HEIGHT;
-                SDL_BlitScaled(g_currentSurface, NULL, g_screenSurface, &rectBlit);
+                SDL_RenderClear(g_renderer);
                 
-                SDL_UpdateWindowSurface(g_window);
+                SDL_RenderCopy(g_renderer, g_currentTexture, nullptr, nullptr);
+                
+                SDL_RenderPresent(g_renderer);
             }
         }
     }
