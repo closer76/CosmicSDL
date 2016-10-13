@@ -11,6 +11,7 @@
 
 //Using SDL and standard IO
 #include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
 #include <stdio.h>
 
 #include <vector>
@@ -40,7 +41,8 @@ vector<string> g_imageNameList {
     "up.bmp",
     "down.bmp",
     "left.bmp",
-    "right.bmp"
+    "right.bmp",
+    "loaded.png"
 };
 
 map<string,SDL_Surface*> g_surfaceList;
@@ -52,25 +54,28 @@ bool init()
         printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
         return false;
     }
-    else
+
+    //Create window
+    g_window = SDL_CreateWindow( "SDL Tutorial",
+                              SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED,
+                              SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    if( g_window == NULL )
     {
-        //Create window
-        g_window = SDL_CreateWindow( "SDL Tutorial",
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-        if( g_window == NULL )
-        {
-            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-            return false;
-        }
-        else
-        {
-            // Get window surface
-            g_screenSurface = SDL_GetWindowSurface(g_window);
-        }
+        printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+        return false;
     }
-    
+
+    // Initialize SDL_image.
+    int imgFlags = IMG_INIT_PNG;
+    if ( (IMG_Init(imgFlags) & imgFlags) == 0) {
+        printf("Unable to initialize SDL_image! SDL_Error: %s\n", SDL_GetError());
+        return false;
+    }
+
+    // Get window surface
+    g_screenSurface = SDL_GetWindowSurface(g_window);
+
     return true;
 }
 
@@ -79,7 +84,7 @@ SDL_Surface* loadSurface(const string& path)
     SDL_Surface* surfaceRaw = nullptr;
     SDL_Surface* surfaceOptimized = nullptr;
     
-    surfaceRaw = SDL_LoadBMP(path.c_str());
+    surfaceRaw = IMG_Load(path.c_str());
     if (!surfaceRaw)
     {
         printf("Unable to load image %s! SDL Error: %s\n",
@@ -119,7 +124,7 @@ bool loadMedia()
     }
     
     // Set current surface to default one.
-    g_currentSurface = g_surfaceList["press.bmp"];
+    g_currentSurface = g_surfaceList["loaded.png"];
     
     return result;
 }

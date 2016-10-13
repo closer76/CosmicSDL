@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69B5C1D31DAF645C00D9E654 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B5C1D21DAF645C00D9E654 /* SDL2_image.framework */; };
+		69B5C1D51DAF647700D9E654 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B5C1D41DAF647700D9E654 /* SDL2_ttf.framework */; };
 		69FDBEFA1DAE388E00B597B3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 69FDBEF91DAE388E00B597B3 /* main.cpp */; };
 		69FDBF021DAE38DE00B597B3 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69FDBF011DAE38DE00B597B3 /* SDL2.framework */; };
 /* End PBXBuildFile section */
@@ -30,6 +32,9 @@
 		69B5C1CE1DAF3E6C00D9E654 /* press.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = press.bmp; path = WorkingDirectory/press.bmp; sourceTree = "<group>"; };
 		69B5C1CF1DAF3E6C00D9E654 /* right.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = right.bmp; path = WorkingDirectory/right.bmp; sourceTree = "<group>"; };
 		69B5C1D01DAF3E6C00D9E654 /* up.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = up.bmp; path = WorkingDirectory/up.bmp; sourceTree = "<group>"; };
+		69B5C1D21DAF645C00D9E654 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		69B5C1D41DAF647700D9E654 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
+		69B5C1D61DAF66E000D9E654 /* loaded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = loaded.png; path = WorkingDirectory/loaded.png; sourceTree = "<group>"; };
 		69FDBEF61DAE388E00B597B3 /* CosmicSDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CosmicSDL; sourceTree = BUILT_PRODUCTS_DIR; };
 		69FDBEF91DAE388E00B597B3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		69FDBF011DAE38DE00B597B3 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -40,6 +45,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69B5C1D51DAF647700D9E654 /* SDL2_ttf.framework in Frameworks */,
+				69B5C1D31DAF645C00D9E654 /* SDL2_image.framework in Frameworks */,
 				69FDBF021DAE38DE00B597B3 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,6 +57,7 @@
 		69B5C1D11DAF3E7400D9E654 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				69B5C1D61DAF66E000D9E654 /* loaded.png */,
 				69B5C1CB1DAF3E6C00D9E654 /* down.bmp */,
 				69B5C1CC1DAF3E6C00D9E654 /* hello_world.bmp */,
 				69B5C1CD1DAF3E6C00D9E654 /* left.bmp */,
@@ -89,6 +97,8 @@
 		69FDBF001DAE38DE00B597B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				69B5C1D41DAF647700D9E654 /* SDL2_ttf.framework */,
+				69B5C1D21DAF645C00D9E654 /* SDL2_image.framework */,
 				69FDBF011DAE38DE00B597B3 /* SDL2.framework */,
 			);
 			name = Frameworks;
