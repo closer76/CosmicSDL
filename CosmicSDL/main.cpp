@@ -13,6 +13,14 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
+#include <vector>
+#include <map>
+#include <string>
+
+using std::vector;
+using std::map;
+using std::string;
+
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -24,7 +32,18 @@ SDL_Window* g_window = nullptr;
 //The surface contained by the window
 SDL_Surface* g_screenSurface = nullptr;
 
-SDL_Surface* g_hellowWorldSurface = nullptr;
+SDL_Surface* g_currentSurface = nullptr;
+
+vector<string> g_imageNameList {
+    "hello_world.bmp",
+    "press.bmp",
+    "up.bmp",
+    "down.bmp",
+    "left.bmp",
+    "right.bmp"
+};
+
+map<string,SDL_Surface*> g_surfaceList;
 
 bool init()
 {
@@ -57,22 +76,39 @@ bool init()
 
 bool loadMedia()
 {
-    g_hellowWorldSurface = SDL_LoadBMP("hello_world.bmp");
-    if (!g_hellowWorldSurface) {
-        printf("Unable to load image %s! SDL Error: %s\n",
-               "02_getting_an_image_on_the_screen/hello_world.bmp",
-               SDL_GetError());
-        return false;
-    }
+    bool result = true;
+    SDL_Surface* surface = nullptr;
     
-    return true;
+    for (const auto& str : g_imageNameList)
+    {
+        surface = SDL_LoadBMP(str.c_str());
+        if (surface) {
+            g_surfaceList[str] = surface;
+        } else {
+            printf("Unable to load image %s! SDL Error: %s\n",
+                   str.c_str(),
+                   SDL_GetError());
+            result = false;
+        }
+    }
+    g_currentSurface = g_surfaceList["press.bmp"];
+    
+    return result;
+}
+
+void releaseMedia() {
+    for (const auto& pair : g_surfaceList)
+    {
+        SDL_FreeSurface(pair.second);
+        g_surfaceList[pair.first] = nullptr;
+    }
+    g_surfaceList.clear();
 }
 
 void terminate()
 {
     // Release surface
-    SDL_FreeSurface(g_hellowWorldSurface);
-    g_hellowWorldSurface = nullptr;
+    releaseMedia();
     
     // Destroy window
     SDL_DestroyWindow( g_window );
@@ -103,9 +139,36 @@ int main( int argc, char* args[] )
                     if (evt.type == SDL_QUIT) {
                         bQuit = true;
                     }
+                    else if (evt.type == SDL_KEYDOWN)
+                    {
+                        switch (evt.key.keysym.sym) {
+                            case SDLK_UP:
+                                g_currentSurface = g_surfaceList["up.bmp"];
+                                break;
+
+                            case SDLK_DOWN:
+                                g_currentSurface = g_surfaceList["down.bmp"];
+                                break;
+
+                            case SDLK_LEFT:
+                                g_currentSurface = g_surfaceList["left.bmp"];
+                                break;
+
+                            case SDLK_RIGHT:
+                                g_currentSurface = g_surfaceList["right.bmp"];
+                                break;
+                                
+                            case SDLK_ESCAPE:
+                                g_currentSurface = g_surfaceList["press.bmp"];
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    }
                 }
                 
-                SDL_BlitSurface(g_hellowWorldSurface, NULL, g_screenSurface, NULL);
+                SDL_BlitSurface(g_currentSurface, NULL, g_screenSurface, NULL);
                 
                 SDL_UpdateWindowSurface(g_window);
             }

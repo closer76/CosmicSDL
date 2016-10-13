@@ -24,6 +24,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		69B5C1CB1DAF3E6C00D9E654 /* down.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = down.bmp; path = WorkingDirectory/down.bmp; sourceTree = "<group>"; };
+		69B5C1CC1DAF3E6C00D9E654 /* hello_world.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = hello_world.bmp; path = WorkingDirectory/hello_world.bmp; sourceTree = "<group>"; };
+		69B5C1CD1DAF3E6C00D9E654 /* left.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = left.bmp; path = WorkingDirectory/left.bmp; sourceTree = "<group>"; };
+		69B5C1CE1DAF3E6C00D9E654 /* press.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = press.bmp; path = WorkingDirectory/press.bmp; sourceTree = "<group>"; };
+		69B5C1CF1DAF3E6C00D9E654 /* right.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = right.bmp; path = WorkingDirectory/right.bmp; sourceTree = "<group>"; };
+		69B5C1D01DAF3E6C00D9E654 /* up.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = up.bmp; path = WorkingDirectory/up.bmp; sourceTree = "<group>"; };
 		69FDBEF61DAE388E00B597B3 /* CosmicSDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CosmicSDL; sourceTree = BUILT_PRODUCTS_DIR; };
 		69FDBEF91DAE388E00B597B3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		69FDBF011DAE38DE00B597B3 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -41,9 +47,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		69B5C1D11DAF3E7400D9E654 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				69B5C1CB1DAF3E6C00D9E654 /* down.bmp */,
+				69B5C1CC1DAF3E6C00D9E654 /* hello_world.bmp */,
+				69B5C1CD1DAF3E6C00D9E654 /* left.bmp */,
+				69B5C1CE1DAF3E6C00D9E654 /* press.bmp */,
+				69B5C1CF1DAF3E6C00D9E654 /* right.bmp */,
+				69B5C1D01DAF3E6C00D9E654 /* up.bmp */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 		69FDBEED1DAE388D00B597B3 = {
 			isa = PBXGroup;
 			children = (
+				69B5C1D11DAF3E7400D9E654 /* Assets */,
 				69FDBEF81DAE388E00B597B3 /* CosmicSDL */,
 				69FDBEF71DAE388E00B597B3 /* Products */,
 				69FDBF001DAE38DE00B597B3 /* Frameworks */,
@@ -266,6 +286,7 @@
 				69FDBEFF1DAE388E00B597B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
