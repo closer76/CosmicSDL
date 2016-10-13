@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		69B5C1D31DAF645C00D9E654 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B5C1D21DAF645C00D9E654 /* SDL2_image.framework */; };
 		69B5C1D51DAF647700D9E654 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B5C1D41DAF647700D9E654 /* SDL2_ttf.framework */; };
+		69B5C1DB1DAF7B0900D9E654 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 69B5C1DA1DAF7B0900D9E654 /* Texture.cpp */; };
 		69FDBEFA1DAE388E00B597B3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 69FDBEF91DAE388E00B597B3 /* main.cpp */; };
 		69FDBF021DAE38DE00B597B3 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69FDBF011DAE38DE00B597B3 /* SDL2.framework */; };
 /* End PBXBuildFile section */
@@ -35,6 +36,8 @@
 		69B5C1D21DAF645C00D9E654 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		69B5C1D41DAF647700D9E654 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
 		69B5C1D61DAF66E000D9E654 /* loaded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = loaded.png; path = WorkingDirectory/loaded.png; sourceTree = "<group>"; };
+		69B5C1D91DAF79D400D9E654 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		69B5C1DA1DAF7B0900D9E654 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		69FDBEF61DAE388E00B597B3 /* CosmicSDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CosmicSDL; sourceTree = BUILT_PRODUCTS_DIR; };
 		69FDBEF91DAE388E00B597B3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		69FDBF011DAE38DE00B597B3 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -89,6 +92,8 @@
 		69FDBEF81DAE388E00B597B3 /* CosmicSDL */ = {
 			isa = PBXGroup;
 			children = (
+				69B5C1DA1DAF7B0900D9E654 /* Texture.cpp */,
+				69B5C1D91DAF79D400D9E654 /* Texture.h */,
 				69FDBEF91DAE388E00B597B3 /* main.cpp */,
 			);
 			path = CosmicSDL;
@@ -162,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69FDBEFA1DAE388E00B597B3 /* main.cpp in Sources */,
+				69B5C1DB1DAF7B0900D9E654 /* Texture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

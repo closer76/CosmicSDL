@@ -12,7 +12,7 @@
 //Using SDL and standard IO
 #include <SDL2/SDL.h>
 #include <SDL2_image/SDL_image.h>
-#include <stdio.h>
+#include "Texture.h"
 
 #include <vector>
 #include <map>
@@ -21,6 +21,7 @@
 using std::vector;
 using std::map;
 using std::string;
+
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -33,7 +34,7 @@ SDL_Window* g_window = nullptr;
 // Main renderer
 SDL_Renderer* g_renderer = nullptr;
 
-SDL_Texture* g_currentTexture = nullptr;
+CTexture* g_currentTexture = nullptr;
 
 vector<string> g_imageNameList {
     "hello_world.bmp",
@@ -45,7 +46,7 @@ vector<string> g_imageNameList {
     "loaded.png"
 };
 
-map<string,SDL_Texture*> g_textureList;
+map<string,CTexture*> g_textureList;
 
 bool init()
 {
@@ -89,46 +90,20 @@ bool init()
     return true;
 }
 
-SDL_Texture* loadTexture(const string& path)
-{
-    SDL_Surface* surface = nullptr;
-    SDL_Texture* texture = nullptr;
-    
-    surface = IMG_Load(path.c_str());
-    if (!surface)
-    {
-        printf("Unable to load image %s! SDL Error: %s\n",
-               path.c_str(),
-               SDL_GetError());
-    }
-    else
-    {
-        texture = SDL_CreateTextureFromSurface(g_renderer, surface);
-        if (!texture)
-        {
-            printf("Unable to create texture from image %s! SDL Error: %s\n",
-                   path.c_str(),
-                   SDL_GetError());
-        }
-        
-        // release old surface
-        SDL_FreeSurface(surface);
-    }
-    
-    return texture;
-}
-
 bool loadMedia()
 {
     bool result = true;
-    SDL_Texture* texture = nullptr;
+    CTexture* texture = nullptr;
     
     for (const auto& str : g_imageNameList)
     {
-        texture = loadTexture(str.c_str());
-        if (texture) {
+        texture = new CTexture();
+        if (texture->loadFromFile(g_renderer, str))
+        {
             g_textureList[str] = texture;
-        } else {
+        }
+        else
+        {
             result = false;
         }
     }
@@ -142,7 +117,7 @@ bool loadMedia()
 void releaseMedia() {
     for (const auto& pair : g_textureList)
     {
-        SDL_DestroyTexture(pair.second);
+        delete pair.second;
         g_textureList[pair.first] = nullptr;
     }
     g_textureList.clear();
@@ -253,7 +228,7 @@ int main( int argc, char* args[] )
             rectViewPort.w = SCREEN_WIDTH / 2;
             rectViewPort.h = SCREEN_HEIGHT / 2;
             SDL_RenderSetViewport(g_renderer, &rectViewPort);
-            SDL_RenderCopy(g_renderer, g_textureList["press.bmp"], NULL, NULL);
+            g_textureList["press.bmp"]->renderFill(g_renderer);
             
             // Lower: hello
             rectViewPort.x = 0;
@@ -261,7 +236,7 @@ int main( int argc, char* args[] )
             rectViewPort.w = SCREEN_WIDTH;
             rectViewPort.h = SCREEN_HEIGHT / 2;
             SDL_RenderSetViewport(g_renderer, &rectViewPort);
-            SDL_RenderCopy(g_renderer, g_textureList["hello_world.bmp"], NULL, NULL);
+            g_textureList["hello_world.bmp"]->renderFill(g_renderer);
 
             // Upper-left
             rectViewPort.x = 0;
@@ -269,7 +244,7 @@ int main( int argc, char* args[] )
             rectViewPort.w = SCREEN_WIDTH / 2;
             rectViewPort.h = SCREEN_HEIGHT / 2;
             SDL_RenderSetViewport(g_renderer, &rectViewPort);
-            SDL_RenderCopy(g_renderer, g_currentTexture, nullptr, nullptr);
+            g_currentTexture->renderFill(g_renderer);
             
             SDL_RenderPresent(g_renderer);
         } // main loop
