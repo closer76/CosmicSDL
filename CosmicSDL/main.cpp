@@ -94,11 +94,21 @@ int main( int argc, char* args[] )
         if (!loadMedia()) {
             printf("Failed to load media...\n");
         } else {
-            SDL_BlitSurface(g_hellowWorldSurface, NULL, g_screenSurface, NULL);
+            bool bQuit = false;
+            SDL_Event evt;
             
-            SDL_UpdateWindowSurface(g_window);
-            
-            SDL_Delay(2000);
+            while (!bQuit) {
+                // Handle user events
+                while (SDL_PollEvent(&evt) != 0) {
+                    if (evt.type == SDL_QUIT) {
+                        bQuit = true;
+                    }
+                }
+                
+                SDL_BlitSurface(g_hellowWorldSurface, NULL, g_screenSurface, NULL);
+                
+                SDL_UpdateWindowSurface(g_window);
+            }
         }
     }
     
