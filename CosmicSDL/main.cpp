@@ -74,6 +74,35 @@ bool init()
     return true;
 }
 
+SDL_Surface* loadSurface(const string& path)
+{
+    SDL_Surface* surfaceRaw = nullptr;
+    SDL_Surface* surfaceOptimized = nullptr;
+    
+    surfaceRaw = SDL_LoadBMP(path.c_str());
+    if (!surfaceRaw)
+    {
+        printf("Unable to load image %s! SDL Error: %s\n",
+               path.c_str(),
+               SDL_GetError());
+    }
+    else
+    {
+        surfaceOptimized = SDL_ConvertSurface(surfaceRaw, g_screenSurface->format, 0);
+        if (!surfaceOptimized)
+        {
+            printf("Unable to optimize image %s! SDL Error: %s\n",
+                   path.c_str(),
+                   SDL_GetError());
+        }
+        
+        // release old surface
+        SDL_FreeSurface(surfaceRaw);
+    }
+    
+    return surfaceOptimized;
+}
+
 bool loadMedia()
 {
     bool result = true;
@@ -81,16 +110,15 @@ bool loadMedia()
     
     for (const auto& str : g_imageNameList)
     {
-        surface = SDL_LoadBMP(str.c_str());
+        surface = loadSurface(str.c_str());
         if (surface) {
             g_surfaceList[str] = surface;
         } else {
-            printf("Unable to load image %s! SDL Error: %s\n",
-                   str.c_str(),
-                   SDL_GetError());
             result = false;
         }
     }
+    
+    // Set current surface to default one.
     g_currentSurface = g_surfaceList["press.bmp"];
     
     return result;
@@ -168,7 +196,13 @@ int main( int argc, char* args[] )
                     }
                 }
                 
-                SDL_BlitSurface(g_currentSurface, NULL, g_screenSurface, NULL);
+                //SDL_BlitSurface(g_currentSurface, NULL, g_screenSurface, NULL);
+                SDL_Rect rectBlit;
+                rectBlit.x = 0;
+                rectBlit.y = 0;
+                rectBlit.w = SCREEN_WIDTH;
+                rectBlit.h = SCREEN_HEIGHT;
+                SDL_BlitScaled(g_currentSurface, NULL, g_screenSurface, &rectBlit);
                 
                 SDL_UpdateWindowSurface(g_window);
             }
