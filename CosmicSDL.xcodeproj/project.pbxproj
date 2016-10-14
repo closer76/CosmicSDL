@@ -38,6 +38,8 @@
 		69B5C1D61DAF66E000D9E654 /* loaded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = loaded.png; path = WorkingDirectory/loaded.png; sourceTree = "<group>"; };
 		69B5C1D91DAF79D400D9E654 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		69B5C1DA1DAF7B0900D9E654 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		69B5C1DC1DB080B300D9E654 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = WorkingDirectory/background.png; sourceTree = "<group>"; };
+		69B5C1DD1DB080B300D9E654 /* foo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = foo.png; path = WorkingDirectory/foo.png; sourceTree = "<group>"; };
 		69FDBEF61DAE388E00B597B3 /* CosmicSDL */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CosmicSDL; sourceTree = BUILT_PRODUCTS_DIR; };
 		69FDBEF91DAE388E00B597B3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		69FDBF011DAE38DE00B597B3 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -60,13 +62,15 @@
 		69B5C1D11DAF3E7400D9E654 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				69B5C1D61DAF66E000D9E654 /* loaded.png */,
 				69B5C1CB1DAF3E6C00D9E654 /* down.bmp */,
 				69B5C1CC1DAF3E6C00D9E654 /* hello_world.bmp */,
 				69B5C1CD1DAF3E6C00D9E654 /* left.bmp */,
 				69B5C1CE1DAF3E6C00D9E654 /* press.bmp */,
 				69B5C1CF1DAF3E6C00D9E654 /* right.bmp */,
 				69B5C1D01DAF3E6C00D9E654 /* up.bmp */,
+				69B5C1DC1DB080B300D9E654 /* background.png */,
+				69B5C1DD1DB080B300D9E654 /* foo.png */,
+				69B5C1D61DAF66E000D9E654 /* loaded.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
